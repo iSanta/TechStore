@@ -20,7 +20,7 @@ namespace TechStore.Presentation.BrandController
             applicationDbContext = _applicationDbContext;
         }
 
-        [HttpGet(nameof(GetAllBrands))]
+        /*[HttpGet(nameof(GetAllBrands))]
         public IActionResult GetAllBrands()
         {
             var obj = customService.GetAll();
@@ -46,6 +46,6 @@ namespace TechStore.Presentation.BrandController
             {
                 return BadRequest("Somethingwent wrong");
             }
-        }
+        }*/
     }
 }

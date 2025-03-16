@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using TechStore.Application.ICustomService;
 using TechStore.Core.Entities;
 using TechStore.Domain.Data;
+using TechStore.Domain.Entities;
+
 using static TechStore.Application.ICustomService.ICustomService;
 
 namespace TechStore.Presentation.CategoryController
@@ -20,73 +22,52 @@ namespace TechStore.Presentation.CategoryController
         }
 
         [HttpGet(nameof(GetCategoryById))]
-        public IActionResult GetCategoryById(int Id)
+        public IActionResult GetCategoryById(int _id)
         {
-            var obj = customService.Get(Id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(obj);
-            }
+            BaseResponse<Category> obj = customService.Get(_id);
+            if(obj.Status == true) return Ok(obj);
+            else return BadRequest(obj);
         }
 
         [HttpGet(nameof(GetAllCategories))]
         public IActionResult GetAllCategories()
         {
-            var obj = customService.GetAll();
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(obj);
-            }
+            BaseResponse<IEnumerable<Category>> obj = customService.GetAll();
+            if (obj.Status == true) return Ok(obj);
+            else return BadRequest(obj);
         }
 
         [HttpPost(nameof(CreateCategory))]
-        public IActionResult CreateCategory(Category category)
+        public IActionResult CreateCategory(CategoryCreateRequest _category)
         {
-            if (category != null)
-            {
-                customService.Insert(category);
-                return Ok("Created Successfully");
-            }
-            else
-            {
-                return BadRequest("Somethingwent wrong");
-            }
+            var category = new Category();
+            BaseResponse<Category> obj = customService.Insert(_category);
+            if (obj.Status == true) return Ok(obj);
+            else return BadRequest(obj);
         }
 
         [HttpPut(nameof(UpdateCategory))]
-        public IActionResult UpdateCategory(Category category)
+        public IActionResult UpdateCategory(CategoryUpdateRequest _category)
         {
-            if (category != null)
-            {
-                customService.Update(category);
-                return Ok("Updated SuccessFully");
-            }
-            else
-            {
-                return BadRequest();
-            }
+            BaseResponse<Category> obj = customService.Update(_category);
+            if (obj.Status == true) return Ok(obj);
+            else return BadRequest(obj);
+        }
+
+        [HttpPut(nameof(ChangeStateCategory))]
+        public IActionResult ChangeStateCategory(int _id)
+        {
+            BaseResponse<Category> obj = customService.ChangeState(_id);
+            if (obj.Status == true) return Ok(obj);
+            else return BadRequest(obj);
         }
 
         [HttpDelete(nameof(DeleteCategory))]
-        public IActionResult DeleteCategory(Category category)
+        public IActionResult DeleteCategory(int _id)
         {
-            if (category != null)
-            {
-                customService.Delete(category);
-                return Ok("Deleted Successfully");
-            }
-            else
-            {
-                return BadRequest("Something went wrong");
-            }
+            BaseResponse<Category> obj = customService.Remove(_id);
+            if (obj.Status == true) return Ok(obj);
+            else return BadRequest(obj);
         }
     }
 }

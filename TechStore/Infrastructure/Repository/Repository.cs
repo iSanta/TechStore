@@ -24,6 +24,7 @@ namespace TechStore.Infrastructure.Repository
             {
                 throw new ArgumentNullException("entity");
             }
+
             entities.Remove(entity);
             _applicationDbContext.SaveChanges();
         }
@@ -54,6 +55,7 @@ namespace TechStore.Infrastructure.Repository
             {
                 throw new ArgumentNullException("entity");
             }
+        
             entities.Remove(entity);
         }
 
@@ -68,6 +70,7 @@ namespace TechStore.Infrastructure.Repository
             {
                 throw new ArgumentNullException("entity");
             }
+
             entity.ModifiedDate = DateTime.UtcNow;
             entities.Update(entity);
             _applicationDbContext.SaveChanges();

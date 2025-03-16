@@ -2,6 +2,7 @@
 using TechStore.Core.Entities;
 using TechStore.Domain.Models;
 using TechStore.Infrastructure.IRepository;
+using TechStore.Domain.Entities;
 
 namespace TechStore.Application.BrandService
 {
@@ -13,58 +14,33 @@ namespace TechStore.Application.BrandService
         {
             genericRepository = _genericRepository;
         }
-        public void Delete(Brand entity)
+
+        public BaseResponse<Brand> ChangeState(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Brand Get(int Id)
+        public BaseResponse<Brand> Get(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Brand> GetAll()
-        {
-            try
-            {
-                var obj = genericRepository.GetAll();
-                if (obj != null)
-                {
-                    return obj;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void Insert(Brand entity)
-        {
-            try
-            {
-                if (entity != null)
-                {
-                    genericRepository.Insert(entity);
-                    genericRepository.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void Remove(Brand entity)
+        public BaseResponse<IEnumerable<Brand>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Brand entity)
+        public BaseResponse<Brand> Insert(object _create)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BaseResponse<Brand> Remove(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BaseResponse<Brand> Update(object _update)
         {
             throw new NotImplementedException();
         }
