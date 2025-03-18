@@ -8,6 +8,8 @@ using TechStore.Application.CategoryService;
 using Microsoft.AspNetCore.Authentication;
 using TechStore.Domain.Models;
 using TechStore.Application.BrandService;
+using TechStore.Application.ProductService;
+using TechStore.Domain.Models.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program));
 
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -28,6 +31,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICustomService<Category>, CategoryService>();
 builder.Services.AddScoped<ICustomService<Brand>, BrandService>();
+builder.Services.AddScoped<ICustomService<ProductDto>, ProductService>();
 #endregion
 
 

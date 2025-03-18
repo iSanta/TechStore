@@ -12,7 +12,7 @@ using TechStore.Domain.Data;
 namespace TechStore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250314020138_version_0")]
+    [Migration("20250318050213_version_0")]
     partial class version_0
     {
         /// <inheritdoc />
@@ -52,7 +52,37 @@ namespace TechStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("TechStore.Domain.Models.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("TechStore.Domain.Models.Product", b =>
@@ -69,6 +99,9 @@ namespace TechStore.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IDBrand")
+                        .HasColumnType("int");
 
                     b.Property<int>("IDCategory")
                         .HasColumnType("int");
@@ -88,23 +121,38 @@ namespace TechStore.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IDBrand");
+
                     b.HasIndex("IDCategory");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("TechStore.Domain.Models.Product", b =>
                 {
+                    b.HasOne("TechStore.Domain.Models.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("IDBrand")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TechStore.Core.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("IDCategory")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Brand");
+
                     b.Navigation("Category");
                 });
 
             modelBuilder.Entity("TechStore.Core.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("TechStore.Domain.Models.Brand", b =>
                 {
                     b.Navigation("Products");
                 });

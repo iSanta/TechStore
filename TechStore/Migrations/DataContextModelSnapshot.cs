@@ -49,7 +49,7 @@ namespace TechStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TechStore.Domain.Models.Brand", b =>
@@ -79,7 +79,7 @@ namespace TechStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("TechStore.Domain.Models.Product", b =>
@@ -122,7 +122,7 @@ namespace TechStore.Migrations
 
                     b.HasIndex("IDCategory");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("TechStore.Domain.Models.Product", b =>

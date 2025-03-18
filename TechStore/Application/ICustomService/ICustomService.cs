@@ -12,7 +12,7 @@ namespace TechStore.Application.ICustomService
             BaseResponse<T> Insert(object _create);
             BaseResponse<T> Update(object _update);
             BaseResponse<T> Remove(int Id);
-            BaseResponse<T> ChangeState(int Id);
+            BaseResponse<T> ChangeState(int _d);
         }
     }
 }

@@ -12,7 +12,24 @@ namespace TechStore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Brands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brands", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -25,11 +42,11 @@ namespace TechStore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -38,24 +55,36 @@ namespace TechStore.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
                     IDCategory = table.Column<int>(type: "int", nullable: false),
+                    IDBrand = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_Category_IDCategory",
+                        name: "FK_Products_Brands_IDBrand",
+                        column: x => x.IDBrand,
+                        principalTable: "Brands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_IDCategory",
                         column: x => x.IDCategory,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_IDCategory",
-                table: "Product",
+                name: "IX_Products_IDBrand",
+                table: "Products",
+                column: "IDBrand");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_IDCategory",
+                table: "Products",
                 column: "IDCategory");
         }
 
@@ -63,10 +92,13 @@ namespace TechStore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Brands");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechStore.Core.Entities;
+using TechStore.Domain.Models;
 
 namespace TechStore.Domain.Data
 {
@@ -12,6 +13,7 @@ namespace TechStore.Domain.Data
 
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Category> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Brand> Brands { get; set; }
     }
 }
