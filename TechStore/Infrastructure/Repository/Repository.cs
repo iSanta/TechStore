@@ -30,14 +30,24 @@ namespace TechStore.Infrastructure.Repository
             _applicationDbContext.SaveChanges();
         }
 
-        public T Get(int Id)
+        public T Get(int Id, params Expression<Func<T, object>>[] includedProperties)
         {
-            return entities.SingleOrDefault(c => c.Id == Id);
-        }
 
-        public IEnumerable<T> GetAll()
-        {
-            return entities.AsEnumerable();
+            var entity = entities.Find(Id);
+            if(entity != null)
+            {
+                IQueryable<T> query = entities.Where(e => EF.Property<int>(e, "Id") == Id);
+
+                foreach (var includedProperty in includedProperties)
+                {
+                    query = query.Include(includedProperty);
+                }
+
+                return query.FirstOrDefault();
+            }
+
+            return null;
+       
         }
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includedProperties)

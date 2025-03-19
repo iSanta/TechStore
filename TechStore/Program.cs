@@ -29,8 +29,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 #region Service Injected
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<ICustomService<Category>, CategoryService>();
-builder.Services.AddScoped<ICustomService<Brand>, BrandService>();
+builder.Services.AddScoped<ICustomService<CategoryDto>, CategoryService>();
+builder.Services.AddScoped<ICustomService<BrandDto>, BrandService>();
 builder.Services.AddScoped<ICustomService<ProductDto>, ProductService>();
 #endregion
 

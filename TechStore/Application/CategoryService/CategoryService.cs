@@ -1,24 +1,27 @@
-﻿using TechStore.Core.Entities;
+﻿using AutoMapper;
+using TechStore.Core.Entities;
 using TechStore.Domain.Entities;
+using TechStore.Domain.Models.DTO;
 using TechStore.Infrastructure.IRepository;
 using static TechStore.Application.ICustomService.ICustomService;
 
 namespace TechStore.Application.CategoryService
 {
-    public class CategoryService : ICustomService<Category>
+    public class CategoryService : ICustomService<CategoryDto>
     {
         private readonly IRepository<Category> genericRepository;
-
-        public CategoryService(IRepository<Category> _genericRepository)
+        private readonly IMapper mapper;
+        public CategoryService(IRepository<Category> _genericRepository, IMapper _mapper)
         {
             genericRepository = _genericRepository;
+            mapper = _mapper;
         }
 
-        public BaseResponse<Category> ChangeState(int _id)
+        public BaseResponse<CategoryDto> ChangeState(int _id)
         {
             try
             {
-                BaseResponse<Category> response = new BaseResponse<Category>();
+                BaseResponse<CategoryDto> response = new BaseResponse<CategoryDto>();
                 Category entity = genericRepository.Get(_id);
                 if (entity != null) { 
                     entity.IsActive = !entity.IsActive;
@@ -39,15 +42,16 @@ namespace TechStore.Application.CategoryService
             }
         }
 
-        public BaseResponse<Category> Get(int _id)
+        public BaseResponse<CategoryDto> Get(int _id)
         {
             try
             {
-                BaseResponse<Category> response = new BaseResponse<Category>();
-                var obj = genericRepository.Get(_id);
+                BaseResponse<CategoryDto> response = new BaseResponse<CategoryDto>();
+                var obj = genericRepository.Get(_id, p => p.Products);
                 if (obj != null)
                 {
-                    response.objectResponse = obj;
+                    var mappedObj = mapper.Map<CategoryDto>(obj);
+                    response.objectResponse = mappedObj;
                 }
                 else
                 {
@@ -62,15 +66,16 @@ namespace TechStore.Application.CategoryService
             }
         }
 
-        public BaseResponse<IEnumerable<Category>> GetAll()
+        public BaseResponse<IEnumerable<CategoryDto>> GetAll()
         {
             try
             {
-                BaseResponse<IEnumerable<Category>> response = new BaseResponse<IEnumerable<Category>>();
-                var obj = genericRepository.GetAll();
+                BaseResponse<IEnumerable<CategoryDto>> response = new BaseResponse<IEnumerable<CategoryDto>>();
+                var obj = genericRepository.GetAll(p => p.Products).ToList();
                 if (obj != null)
                 {
-                    response.objectResponse = obj;
+                    var mappedObj = mapper.Map<IEnumerable<CategoryDto>>(obj);
+                    response.objectResponse = mappedObj;
                 }
                 else
                 {
@@ -85,11 +90,11 @@ namespace TechStore.Application.CategoryService
             }
         }
 
-        public BaseResponse<Category> Insert(object _category)
+        public BaseResponse<CategoryDto> Insert(object _category)
         {
             try
             {
-                BaseResponse<Category> response = new BaseResponse<Category>();
+                BaseResponse<CategoryDto> response = new BaseResponse<CategoryDto>();
                 CategoryCreateRequest category = (CategoryCreateRequest)_category;
                 Category entity = new Category();
                 entity.Description = category.Description;
@@ -104,11 +109,11 @@ namespace TechStore.Application.CategoryService
             }
         }
 
-        public BaseResponse<Category> Remove(int _id)
+        public BaseResponse<CategoryDto> Remove(int _id)
         {
             try
             {
-                BaseResponse<Category> response = new BaseResponse<Category>();
+                BaseResponse<CategoryDto> response = new BaseResponse<CategoryDto>();
                 Category entity = genericRepository.Get(_id);
                 if (entity != null)
                 {
@@ -128,11 +133,11 @@ namespace TechStore.Application.CategoryService
             }
         }
 
-        public BaseResponse<Category> Update(object _category)
+        public BaseResponse<CategoryDto> Update(object _category)
         {
             try
             {
-                BaseResponse<Category> response = new BaseResponse<Category>();
+                BaseResponse<CategoryDto> response = new BaseResponse<CategoryDto>();
                 CategoryUpdateRequest category = (CategoryUpdateRequest)_category;
                 Category entity = genericRepository.Get(category.Id ?? -1);
                 if (entity != null)

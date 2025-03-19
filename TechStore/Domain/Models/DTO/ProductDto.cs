@@ -3,7 +3,7 @@ using TechStore.Core.Entities;
 
 namespace TechStore.Domain.Models.DTO
 {
-    public class ProductDtoBase
+    public class ProductBaseDto: BaseEntity
     {
         public int Id { get; set; }
         public string ProductName { get; set; } = string.Empty;
@@ -13,10 +13,10 @@ namespace TechStore.Domain.Models.DTO
         public int IDBrand { get; set; }
     }
 
-    public class ProductDto: ProductDtoBase
+    public class ProductDto: ProductBaseDto
     {
-        public CategoryDtoBase Category { get; set; }
-        public BrandDtoBase Brand { get; set; }
+        public CategoryBaseDto Category { get; set; }
+        public BrandBaseDto Brand { get; set; }
 
     }
 }

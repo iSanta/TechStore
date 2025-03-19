@@ -4,23 +4,26 @@ using TechStore.Domain.Models;
 using TechStore.Infrastructure.IRepository;
 using TechStore.Domain.Entities;
 using System.Security.Cryptography;
+using TechStore.Domain.Models.DTO;
+using AutoMapper;
 
 namespace TechStore.Application.BrandService
 {
-    public class BrandService : ICustomService<Brand>
+    public class BrandService : ICustomService<BrandDto>
     {
         private readonly IRepository<Brand> genericRepository;
-
-        public BrandService(IRepository<Brand> _genericRepository)
+        private readonly IMapper mapper;
+        public BrandService(IRepository<Brand> _genericRepository, IMapper _mapper)
         {
             genericRepository = _genericRepository;
+            mapper = _mapper;
         }
 
-        public BaseResponse<Brand> ChangeState(int _id)
+        public BaseResponse<BrandDto> ChangeState(int _id)
         {
             try
             {
-                BaseResponse<Brand> response = new BaseResponse<Brand>();
+                BaseResponse<BrandDto> response = new BaseResponse<BrandDto>();
                 Brand entity = genericRepository.Get(_id);
                 if (entity != null)
                 {
@@ -42,15 +45,16 @@ namespace TechStore.Application.BrandService
             }
         }
 
-        public BaseResponse<Brand> Get(int _id)
+        public BaseResponse<BrandDto> Get(int _id)
         {
             try
             {
-                BaseResponse<Brand> response = new BaseResponse<Brand>();
-                var obj = genericRepository.Get(_id);
+                BaseResponse<BrandDto> response = new BaseResponse<BrandDto>();
+                var obj = genericRepository.Get(_id, p => p.Products);
                 if (obj != null)
                 {
-                    response.objectResponse = obj;
+                    var mappedObj = mapper.Map<BrandDto>(obj);
+                    response.objectResponse = mappedObj;
                 }
                 else
                 {
@@ -65,15 +69,16 @@ namespace TechStore.Application.BrandService
             }
         }
 
-        public BaseResponse<IEnumerable<Brand>> GetAll()
+        public BaseResponse<IEnumerable<BrandDto>> GetAll()
         {
             try
             {
-                BaseResponse<IEnumerable<Brand>> response = new BaseResponse<IEnumerable<Brand>>();
-                var obj = genericRepository.GetAll();
+                BaseResponse<IEnumerable<BrandDto>> response = new BaseResponse<IEnumerable<BrandDto>>();
+                var obj = genericRepository.GetAll(p => p.Products).ToList();
                 if (obj != null)
                 {
-                    response.objectResponse = obj;
+                    var mappedObj = mapper.Map<IEnumerable<BrandDto>>(obj);
+                    response.objectResponse = mappedObj;
                 }
                 else
                 {
@@ -88,11 +93,11 @@ namespace TechStore.Application.BrandService
             }
         }
 
-        public BaseResponse<Brand> Insert(object _create)
+        public BaseResponse<BrandDto> Insert(object _create)
         {
             try
             {
-                BaseResponse<Brand> response = new BaseResponse<Brand>();
+                BaseResponse<BrandDto> response = new BaseResponse<BrandDto>();
                 BrandCreateRequest brand = (BrandCreateRequest)_create;
                 Brand entity = new Brand();
                 entity.Description = brand.Description;
@@ -107,11 +112,11 @@ namespace TechStore.Application.BrandService
             }
         }
 
-        public BaseResponse<Brand> Remove(int _id)
+        public BaseResponse<BrandDto> Remove(int _id)
         {
             try
             {
-                BaseResponse<Brand> response = new BaseResponse<Brand>();
+                BaseResponse<BrandDto> response = new BaseResponse<BrandDto>();
                 Brand entity = genericRepository.Get(_id);
                 if (entity != null)
                 {
@@ -131,11 +136,11 @@ namespace TechStore.Application.BrandService
             }
         }
 
-        public BaseResponse<Brand> Update(object _update)
+        public BaseResponse<BrandDto> Update(object _update)
         {
             try
             {
-                BaseResponse<Brand> response = new BaseResponse<Brand>();
+                BaseResponse<BrandDto> response = new BaseResponse<BrandDto>();
                 BrandUpdateRequest brand = (BrandUpdateRequest)_update;
                 Brand entity = genericRepository.Get(brand.Id ?? -1);
                 if (entity != null)

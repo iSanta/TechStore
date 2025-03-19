@@ -5,6 +5,7 @@ using TechStore.Core.Entities;
 using TechStore.Domain.Data;
 using TechStore.Domain.Models;
 using TechStore.Domain.Entities;
+using TechStore.Domain.Models.DTO;
 
 namespace TechStore.Presentation.BrandController
 {
@@ -12,10 +13,10 @@ namespace TechStore.Presentation.BrandController
     [ApiController]
     public class BrandController : ControllerBase
     {
-        private readonly ICustomService<Brand> customService;
+        private readonly ICustomService<BrandDto> customService;
         private readonly DataContext applicationDbContext;
 
-        public BrandController(ICustomService<Brand> _customService, DataContext _applicationDbContext)
+        public BrandController(ICustomService<BrandDto> _customService, DataContext _applicationDbContext)
         {
             customService = _customService;
             applicationDbContext = _applicationDbContext;
@@ -24,7 +25,7 @@ namespace TechStore.Presentation.BrandController
         [HttpPut(nameof(ChangeStateBrand))]
         public IActionResult ChangeStateBrand(int _id)
         {
-            BaseResponse<Brand> obj = customService.ChangeState(_id);
+            BaseResponse<BrandDto> obj = customService.ChangeState(_id);
             if (obj.Status == true) return Ok(obj);
             else return BadRequest(obj);
         }
@@ -32,7 +33,7 @@ namespace TechStore.Presentation.BrandController
         [HttpGet(nameof(GetBrandById))]
         public IActionResult GetBrandById(int _id)
         {
-            BaseResponse<Brand> obj = customService.Get(_id);
+            BaseResponse<BrandDto> obj = customService.Get(_id);
             if (obj.Status == true) return Ok(obj);
             else return BadRequest(obj);
         }
@@ -40,7 +41,7 @@ namespace TechStore.Presentation.BrandController
         [HttpGet(nameof(GetAllBrands))]
         public IActionResult GetAllBrands()
         {
-            BaseResponse<IEnumerable<Brand>> obj = customService.GetAll();
+            BaseResponse<IEnumerable<BrandDto>> obj = customService.GetAll();
             if (obj.Status == true) return Ok(obj);
             else return BadRequest(obj);
         }
@@ -49,7 +50,7 @@ namespace TechStore.Presentation.BrandController
         public IActionResult CreateBrand(BrandCreateRequest _brand)
         {
             var brand = new Brand();
-            BaseResponse<Brand> obj = customService.Insert(_brand);
+            BaseResponse<BrandDto> obj = customService.Insert(_brand);
             if (obj.Status == true) return Ok(obj);
             else return BadRequest(obj);
         }
@@ -57,7 +58,7 @@ namespace TechStore.Presentation.BrandController
         [HttpDelete(nameof(DeleteBrand))]
         public IActionResult DeleteBrand(int _id)
         {
-            BaseResponse<Brand> obj = customService.Remove(_id);
+            BaseResponse<BrandDto> obj = customService.Remove(_id);
             if (obj.Status == true) return Ok(obj);
             else return BadRequest(obj);
         }
@@ -65,7 +66,7 @@ namespace TechStore.Presentation.BrandController
         [HttpPut(nameof(UpdateBrand))]
         public IActionResult UpdateBrand(BrandUpdateRequest _brand)
         {
-            BaseResponse<Brand> obj = customService.Update(_brand);
+            BaseResponse<BrandDto> obj = customService.Update(_brand);
             if (obj.Status == true) return Ok(obj);
             else return BadRequest(obj);
         }

@@ -8,9 +8,12 @@ namespace TechStore.Domain.Models.Profiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<Category, CategoryDtoBase>();
-            CreateMap<Brand, BrandDtoBase>();
+            CreateMap<Category, CategoryBaseDto>();
+            CreateMap<Brand, BrandBaseDto>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Brand, BrandDto>();
             CreateMap<Product, ProductDto>();
+            CreateMap<Product, ProductBaseDto>();
         }
     }
 }
